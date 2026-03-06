@@ -1,15 +1,15 @@
 {
   "name": "mcp-app",
   "version": "1.0.0",
-  "description": "MCP App POC — Hello World with LDS StateContainer rendered inside Claude",
+  "description": "MCP App — LDS components rendered inside Claude (Hello World, Cluster Overview, Namespace Metrics)",
   "type": "module",
   "scripts": {
-    "build": "INPUT=mcp-app.html vite build",
+    "build": "rm -rf dist && INPUT=mcp-app.html vite build && INPUT=cluster-overview.html vite build && INPUT=namespace-metrics.html vite build",
     "serve": "npx tsx server.ts",
     "dev": "npm run build && npm run serve"
   },
   "dependencies": {
-    "@lensapp/lds": "^0.1.8",
+    "@lensapp/lds": "^0.1.9",
     "@modelcontextprotocol/ext-apps": "^1.1.2",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "cors": "^2.8.5",
