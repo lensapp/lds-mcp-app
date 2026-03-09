@@ -83,132 +83,87 @@ function ClusterOverviewApp() {
       {
         key: "status",
         header: "Status",
-        width: "120px",
+        width: "130px",
         sortable: true,
         render: (item) => (
           <StatusIndicator status={item.status} label={item.statusLabel} />
         ),
       },
       {
-        key: "role",
-        header: "Role",
-        width: "110px",
-        sortable: true,
-        render: (item) => (
-          <span
-            style={{
-              fontFamily: "var(--lds-font-family-mono)",
-              fontSize: "12px",
-            }}
-          >
-            {item.role}
-          </span>
-        ),
-      },
-      {
         key: "podCount",
         header: "Pods",
-        width: "60px",
+        width: "50px",
         align: "right",
         sortable: true,
       },
       {
         key: "cpuPercent",
-        header: "CPU %",
-        width: "70px",
-        align: "right",
+        header: "CPU",
+        width: "150px",
         sortable: true,
         render: (item) => (
-          <span
-            style={{
-              fontFamily: "var(--lds-font-family-mono)",
-              color:
-                item.cpuPercent > 85
-                  ? "var(--lds-color-critical)"
-                  : item.cpuPercent > 70
-                    ? "var(--lds-color-warning)"
-                    : "var(--lds-color-text-primary)",
-            }}
-          >
-            {item.cpuPercent}%
-          </span>
-        ),
-      },
-      {
-        key: "cpuHistory",
-        header: "CPU Trend",
-        width: "100px",
-        render: (item) => (
-          <Sparkline
-            data={item.cpuHistory}
-            variant="area"
-            width={80}
-            height={24}
-            color={sparklineColor(item.cpuPercent, "cpu")}
-            showEndpoint
-          />
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <Sparkline
+              data={item.cpuHistory}
+              variant="area"
+              width={80}
+              height={24}
+              color={sparklineColor(item.cpuPercent, "cpu")}
+              showEndpoint
+            />
+            <span
+              style={{
+                fontFamily: "var(--lds-font-family-mono)",
+                fontSize: "11px",
+                minWidth: "32px",
+                textAlign: "right",
+                color:
+                  item.cpuPercent > 85
+                    ? "var(--lds-color-critical)"
+                    : item.cpuPercent > 70
+                      ? "var(--lds-color-warning)"
+                      : "var(--lds-color-text-primary)",
+              }}
+            >
+              {item.cpuPercent}%
+            </span>
+          </div>
         ),
       },
       {
         key: "memoryPercent",
-        header: "Mem %",
-        width: "70px",
-        align: "right",
+        header: "Memory",
+        width: "150px",
         sortable: true,
         render: (item) => (
-          <span
-            style={{
-              fontFamily: "var(--lds-font-family-mono)",
-              color:
-                item.memoryPercent > 85
-                  ? "var(--lds-color-critical)"
-                  : item.memoryPercent > 70
-                    ? "var(--lds-color-warning)"
-                    : "var(--lds-color-text-primary)",
-            }}
-          >
-            {item.memoryPercent}%
-          </span>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <Sparkline
+              data={item.memoryHistory}
+              variant="area"
+              width={80}
+              height={24}
+              color={sparklineColor(item.memoryPercent, "memory")}
+              showEndpoint
+            />
+            <span
+              style={{
+                fontFamily: "var(--lds-font-family-mono)",
+                fontSize: "11px",
+                minWidth: "32px",
+                textAlign: "right",
+                color:
+                  item.memoryPercent > 85
+                    ? "var(--lds-color-critical)"
+                    : item.memoryPercent > 70
+                      ? "var(--lds-color-warning)"
+                      : "var(--lds-color-text-primary)",
+              }}
+            >
+              {item.memoryPercent}%
+            </span>
+          </div>
         ),
       },
-      {
-        key: "memoryHistory",
-        header: "Mem Trend",
-        width: "100px",
-        render: (item) => (
-          <Sparkline
-            data={item.memoryHistory}
-            variant="area"
-            width={80}
-            height={24}
-            color={sparklineColor(item.memoryPercent, "memory")}
-            showEndpoint
-          />
-        ),
-      },
-      {
-        key: "restarts",
-        header: "Restarts",
-        width: "80px",
-        align: "right",
-        sortable: true,
-        render: (item) => (
-          <span
-            style={{
-              fontFamily: "var(--lds-font-family-mono)",
-              color:
-                item.restarts > 5
-                  ? "var(--lds-color-critical)"
-                  : item.restarts > 0
-                    ? "var(--lds-color-warning)"
-                    : "var(--lds-color-text-muted)",
-            }}
-          >
-            {item.restarts}
-          </span>
-        ),
-      },
-      { key: "age", header: "Age", width: "60px", sortable: true },
     ],
     [],
   );
