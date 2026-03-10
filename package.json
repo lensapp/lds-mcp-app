@@ -9,7 +9,7 @@
     "dev": "npm run build && npm run serve"
   },
   "dependencies": {
-    "@lensapp/lds": "^0.1.9",
+    "@lensapp/lds": "^0.1.10",
     "@modelcontextprotocol/ext-apps": "^1.1.2",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "cors": "^2.8.5",
