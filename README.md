@@ -1,87 +1,119 @@
-# MCP App POC — Hello World with LDS
+# LDS MCP App — Lens Design System in MCP Apps
 
-A proof-of-concept MCP App that renders a Lens Design System `StateContainer` (idle state) directly inside Claude's chat interface.
+A reference implementation showing how to render [Lens Design System](https://github.com/lensapp/lds) components inside Claude's chat interface via [MCP Apps](https://modelcontextprotocol.io/docs/extensions/apps).
+
+## Tools
+
+### Cluster Health Overview
+
+Sortable `DataTable` with inline `Sparkline` charts and `StatusIndicator` for node health.
+
+**Components used:** `DataTable`, `Sparkline`, `StatusIndicator`, `StateContainer`
+
+```
+"Show me the cluster health overview"
+```
+
+### Namespace Resource Metrics
+
+Stacked area `TimeSeries` charts showing CPU and memory usage across namespaces.
+
+**Components used:** `TimeSeries` (from `@lensapp/lds/charts`), `StateContainer`
+
+```
+"Show me namespace resource metrics"
+```
 
 ## How It Works
 
-### What is MCP?
-
-**MCP (Model Context Protocol)** is a protocol that lets external servers provide **tools** to Claude. Normally, when Claude calls a tool, it gets text back. **MCP Apps** extend this — a tool can declare a `ui://` resource pointing to an HTML page. When Claude calls that tool, the host (Claude Desktop or claude.ai) fetches the HTML and renders it **inside a sandboxed iframe in the conversation**.
-
-### The flow
+**MCP Apps** extend the Model Context Protocol — a tool can declare a `ui://` resource pointing to an HTML page. When Claude calls that tool, the host fetches the HTML and renders it in a sandboxed iframe in the conversation.
 
 ```
-User asks Claude something
-    → Claude decides to call the "hello-world" tool
-    → Host fetches the UI resource (bundled HTML with React + LDS)
-    → Host renders the HTML in a sandboxed iframe in the chat
+User asks Claude
+    → Claude calls the tool (e.g. "cluster-overview")
+    → MCP server returns JSON data + references a UI resource
+    → Host fetches the bundled HTML (React + LDS, single file)
+    → Host renders the HTML in a sandboxed iframe
     → The iframe receives the tool result via postMessage
-    → React renders StateContainer with the greeting data
+    → React renders LDS components with the data
 ```
 
-### Key pieces
+### Project structure
 
-1. **`server.ts`** — MCP server that registers:
-   - A `hello-world` tool with `_meta.ui.resourceUri` pointing to the UI
-   - A resource handler that serves the bundled HTML
-   - An Express HTTP endpoint at `/mcp`
+```
+├── src/
+│   ├── mcp-server.ts          # MCP server: tool registration + data generators
+│   ├── cluster-overview.tsx    # React UI: DataTable + Sparkline + StatusIndicator
+│   └── namespace-metrics.tsx   # React UI: TimeSeries stacked area charts
+├── cluster-overview.html       # HTML entry point for cluster tool
+├── namespace-metrics.html      # HTML entry point for metrics tool
+├── server.ts                   # Express HTTP transport
+├── server-stdio.ts             # Stdio transport
+└── vite.config.ts              # Vite + vite-plugin-singlefile
+```
 
-2. **`src/mcp-app.tsx`** — React app that:
-   - Connects to the host via `App` from `@modelcontextprotocol/ext-apps`
-   - Receives the tool result
-   - Renders LDS `StateContainer` in idle state with the greeting
+### Key patterns
 
-3. **`mcp-app.html`** — Entry point, bundled by Vite into a single self-contained HTML file (React + LDS + CSS all inlined)
-
-### Why MCP Apps instead of a regular web app?
-
-- **Context preservation** — UI lives inside the conversation, no tab switching
-- **Bidirectional data flow** — UI can call server tools, host pushes results
-- **Security** — Sandboxed iframe, no access to parent page
+- Each tool has its own HTML entry + React component
+- `vite-plugin-singlefile` bundles React + LDS + CSS into a single HTML file (~750KB)
+- Sequential builds with `emptyOutDir: false` to support multiple entry points
+- `<meta name="color-scheme" content="light dark" />` for transparent iframe background
+- `font: var(--lds-font-control-standard)` on body for LDS typography
+- Tool descriptions include "do not create additional artifacts" to prevent Claude from generating duplicate UIs
 
 ## Setup
 
 ```bash
 npm install
 npm run build
-npm run serve
+npm run dev      # build + serve
 ```
-
-Server starts at `http://localhost:3001/mcp`.
 
 ## Testing
 
-### Option A: Claude Desktop (local dev)
+### Claude Desktop (stdio)
 
 Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
-    "mcp-app": {
+    "lds-mcp-app": {
+      "command": "node",
+      "args": [
+        "/path/to/lds-mcp-app/node_modules/tsx/dist/cli.mjs",
+        "/path/to/lds-mcp-app/server-stdio.ts"
+      ]
+    }
+  }
+}
+```
+
+Restart Claude Desktop.
+
+### Claude Desktop (HTTP)
+
+```bash
+npm run serve
+```
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "lds-mcp-app": {
       "url": "http://localhost:3001/mcp"
     }
   }
 }
 ```
 
-Restart Claude Desktop. Ask: "Show me the hello world app."
-
-### Option B: claude.ai with tunnel
+### claude.ai with tunnel
 
 ```bash
+npm run serve
 npx cloudflared tunnel --url http://localhost:3001
 ```
 
-Copy the generated URL, go to Claude Settings > Connectors > Add custom connector. Paste the URL + `/mcp` path.
-
-### Option C: basic-host (no Claude needed)
-
-```bash
-git clone https://github.com/modelcontextprotocol/ext-apps.git
-cd ext-apps/examples/basic-host
-npm install
-SERVERS='["http://localhost:3001/mcp"]' npm start
-```
-
-Open `http://localhost:8080` to test the UI rendering directly.
+Add the tunnel URL + `/mcp` as a custom connector in Claude Settings > Connectors.
