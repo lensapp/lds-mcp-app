@@ -2,6 +2,14 @@
 
 A reference implementation showing how to render [Lens Design System](https://github.com/lensapp/lds) components inside Claude's chat interface via [MCP Apps](https://modelcontextprotocol.io/docs/extensions/apps).
 
+<p align="center">
+  <img src="timeseries.png" alt="TimeSeries chart from LDS inside Claude" />
+</p>
+
+<p align="center">
+  <img src="datatable.png" alt="DataTable from LDS inside Claude" />
+</p>
+
 ## Tools
 
 ### Cluster Health Overview
