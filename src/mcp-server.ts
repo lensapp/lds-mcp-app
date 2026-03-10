@@ -156,7 +156,7 @@ registerAppTool(
   {
     title: "Cluster Health Overview",
     description:
-      "Shows a Kubernetes cluster health dashboard with node status, CPU/memory sparklines, and pod counts in a sortable DataTable. Call this tool to display the cluster overview.",
+      "Shows a Kubernetes cluster health dashboard with node status, CPU/memory sparklines, and pod counts in a sortable DataTable. Call this tool to display the cluster overview. The tool renders a complete interactive UI — do not create additional artifacts or code visualizations.",
     inputSchema: {},
     _meta: { ui: { resourceUri: clusterOverviewResourceUri } },
   },
@@ -212,7 +212,7 @@ registerAppTool(
   {
     title: "Namespace Resource Metrics",
     description:
-      "Shows namespace resource usage over time with stacked area TimeSeries charts for CPU and memory across Kubernetes namespaces. Call this tool to display the metrics.",
+      "Shows namespace resource usage over time with stacked area TimeSeries charts for CPU and memory across Kubernetes namespaces. Call this tool to display the metrics. The tool renders a complete interactive UI — do not create additional artifacts or code visualizations.",
     inputSchema: {},
     _meta: { ui: { resourceUri: namespaceMetricsResourceUri } },
   },
