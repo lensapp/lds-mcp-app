@@ -12,53 +12,6 @@ export const server = new McpServer({
   version: "1.0.0",
 });
 
-const resourceUri = "ui://hello-world/mcp-app.html";
-
-registerAppTool(
-  server,
-  "hello-world",
-  {
-    title: "Hello World",
-    description:
-      "Shows a Hello World UI using Lens Design System components. Call this tool to display the greeting.",
-    inputSchema: {},
-    _meta: { ui: { resourceUri } },
-  },
-  async () => {
-    return {
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify({
-            greeting: "Hello from MCP App!",
-            description:
-              "This UI is rendered using Lens Design System's StateContainer component.",
-            timestamp: new Date().toISOString(),
-          }),
-        },
-      ],
-    };
-  },
-);
-
-registerAppResource(
-  server,
-  resourceUri,
-  resourceUri,
-  { mimeType: RESOURCE_MIME_TYPE },
-  async () => {
-    const html = await fs.readFile(
-      path.join(import.meta.dirname, "..", "dist", "mcp-app.html"),
-      "utf-8",
-    );
-    return {
-      contents: [
-        { uri: resourceUri, mimeType: RESOURCE_MIME_TYPE, text: html },
-      ],
-    };
-  },
-);
-
 // ---------------------------------------------------------------------------
 // Data generators
 // ---------------------------------------------------------------------------
@@ -191,7 +144,7 @@ function generateNamespaceMetrics() {
 }
 
 // ---------------------------------------------------------------------------
-// Tool 2: Cluster Health Overview
+// Tool 1: Cluster Health Overview
 // ---------------------------------------------------------------------------
 
 const clusterOverviewResourceUri =
@@ -247,7 +200,7 @@ registerAppResource(
 );
 
 // ---------------------------------------------------------------------------
-// Tool 3: Namespace Resource Metrics
+// Tool 2: Namespace Resource Metrics
 // ---------------------------------------------------------------------------
 
 const namespaceMetricsResourceUri =

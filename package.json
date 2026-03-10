@@ -1,10 +1,10 @@
 {
   "name": "mcp-app",
   "version": "1.0.0",
-  "description": "MCP App — LDS components rendered inside Claude (Hello World, Cluster Overview, Namespace Metrics)",
+  "description": "MCP App — LDS components rendered inside Claude (Cluster Overview, Namespace Metrics)",
   "type": "module",
   "scripts": {
-    "build": "rm -rf dist && INPUT=mcp-app.html vite build && INPUT=cluster-overview.html vite build && INPUT=namespace-metrics.html vite build",
+    "build": "rm -rf dist && INPUT=cluster-overview.html vite build && INPUT=namespace-metrics.html vite build",
     "serve": "npx tsx server.ts",
     "dev": "npm run build && npm run serve"
   },
