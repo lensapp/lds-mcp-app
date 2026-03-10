@@ -107,7 +107,6 @@ function generateNamespaceMetrics() {
     { name: "production", cpuBase: 2.5, cpuStep: 0.3, memBase: 8.0, memStep: 0.5 },
     { name: "staging", cpuBase: 1.2, cpuStep: 0.2, memBase: 3.5, memStep: 0.3 },
     { name: "monitoring", cpuBase: 0.8, cpuStep: 0.15, memBase: 2.0, memStep: 0.2 },
-    { name: "default", cpuBase: 0.3, cpuStep: 0.1, memBase: 0.5, memStep: 0.1 },
   ];
 
   const points = 120;

@@ -29,7 +29,6 @@ const NAMESPACE_COLORS: Record<string, string> = {
   production: "#3b82f6",
   staging: "#f59e0b",
   monitoring: "#10b981",
-  default: "#8b5cf6",
 };
 
 function NamespaceMetricsApp() {
